@@ -1,6 +1,5 @@
+import dbContext from "#infrastructure/dbContext.js";
 import type { Context } from "hono";
-
-import dbContext from "../../infrastructure/dbContext.js";
 
 export const getLocationsQuery = async (c: Context) => {
   const result = await dbContext.query.locations.findMany({

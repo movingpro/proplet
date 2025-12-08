@@ -11,8 +11,10 @@
     "url": "git+https://github.com/mixator/proplet.git"
   },
   "license": "ISC",
-  "author": "",
   "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
   "scripts": {
     "dev": "rolldown --config rolldown.config.ts --watch",
     "build": "rolldown --config rolldown.config.ts",
@@ -21,18 +23,18 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
-    "drizzle-orm": "^0.44.7",
-    "hono": "^4.10.4",
+    "drizzle-orm": "^0.45.0",
+    "hono": "^4.10.7",
     "postgres": "^3.4.7",
-    "zod": "^4.1.12"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@rollup/plugin-run": "^3.1.0",
-    "@types/node": "^24.9.2",
-    "oxfmt": "^0.14.0",
-    "oxlint": "^1.29.0",
-    "oxlint-tsgolint": "^0.7.2",
-    "rolldown": "^1.0.0-beta.51",
+    "@types/node": "^24.10.1",
+    "oxfmt": "^0.16.0",
+    "oxlint": "^1.31.0",
+    "oxlint-tsgolint": "^0.8.3",
+    "rolldown": "^1.0.0-beta.53",
     "typescript": "^5.9.3"
   }
 }

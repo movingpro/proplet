@@ -2,8 +2,8 @@ import type { Context } from "hono";
 
 import { eq } from "drizzle-orm";
 
-import dbContext from "../../infrastructure/dbContext.js";
-import { locations } from "../../infrastructure/schema/locations.js";
+import dbContext from "#infrastructure/dbContext.js";
+import { locations } from "#infrastructure/schema/locations.js";
 
 export const saveLocationsCommand = async (c: Context) => {
   try {

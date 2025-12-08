@@ -10,39 +10,40 @@ const location = z.object({
   secret: z.string().min(1).max(255),
 });
 
-export function unsafeDeserialize(value) {
-  return eval(`(${value})`);
-}
-
-export function unsafeGetter(obj, path) {
-  console.log(`obj.${path}`);
-  return eval(`obj.${path}`);
-}
+const damageLocation = z.object({
+  publicId: z.number().int(),
+  secret: z.string().min(1).max(255),
+});
 
 enum NeedleType {
   condition,
   location,
+  damageLocation,
 }
 
-function transformData(
-  type: NeedleType.condition,
+const schemaMap = {
+  [NeedleType.condition]: condition,
+  [NeedleType.location]: location,
+  [NeedleType.damageLocation]: damageLocation,
+} as const;
+
+type SchemaMap = typeof schemaMap;
+
+type InferSchemaType<T extends NeedleType> = z.infer<SchemaMap[T]>;
+
+const transformData = <T extends NeedleType>(
+  type: T,
   payload: unknown,
-): z.infer<typeof condition>;
-function transformData(
-  type: NeedleType.location,
-  payload: unknown,
-): z.infer<typeof location>;
-function transformData(type: NeedleType, payload: unknown) {
-  switch (type) {
-    case NeedleType.condition:
-      return condition.parse(payload);
-    case NeedleType.location:
-      return location.parse(payload);
-    default:
-      throw new Error(`Unknown type`);
+): InferSchemaType<T> => {
+  const schema = schemaMap[type];
+  if (!schema) {
+    throw new Error(`Unknown type: ${type}`);
   }
-}
+  return schema.parse(payload) as InferSchemaType<T>;
+};
 
-const cData = transformData(NeedleType.condition, { prop: 1 });
-console.log(cData);
-// const lData = transformData(NeedleType.location, { prop: 1 });
+const fn = (type: NeedleType, payload: unknown) => {
+  const parsed = transformData(type, payload);
+
+  return parsed;
+};
