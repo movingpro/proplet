@@ -15,7 +15,7 @@ const damageLocation = z.object({
   secret: z.string().min(1).max(255),
 });
 
-enum NeedleType {
+export enum NeedleType {
   condition,
   location,
   damageLocation,
@@ -27,11 +27,11 @@ const schemaMap = {
   [NeedleType.damageLocation]: damageLocation,
 } as const;
 
-type SchemaMap = typeof schemaMap;
+export type SchemaMap = typeof schemaMap;
 
-type InferSchemaType<T extends NeedleType> = z.infer<SchemaMap[T]>;
+export type InferSchemaType<T extends NeedleType> = z.infer<SchemaMap[T]>;
 
-const transformData = <T extends NeedleType>(
+export const transformData = <T extends NeedleType>(
   type: T,
   payload: unknown,
 ): InferSchemaType<T> => {
@@ -42,7 +42,7 @@ const transformData = <T extends NeedleType>(
   return schema.parse(payload) as InferSchemaType<T>;
 };
 
-const fn = (type: NeedleType, payload: unknown) => {
+export const fn = (type: NeedleType, payload: unknown) => {
   const parsed = transformData(type, payload);
 
   console.log(parsed);
