@@ -20,7 +20,6 @@ queries:
 # Custom query packs
 packs:
   - codeql/javascript-queries
-  - getting-started/codeql-extra-queries-javascript
 
 # Disable default queries (optional - remove if you want default queries)
 # disable-default-queries: true
