@@ -1,0 +1,6 @@
+name: custom/no-console-queries
+version: 1.0.0
+libraryPathDependencies:
+  - codeql/javascript-all
+dependencies:
+  codeql/javascript-all: "*"

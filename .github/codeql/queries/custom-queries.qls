@@ -1,0 +1,7 @@
+- description: Custom queries for console checks
+- queries: .
+- include:
+    kind: problem
+    id:
+      - js/console-log
+      - js/console-statement

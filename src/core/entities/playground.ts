@@ -45,5 +45,6 @@ const transformData = <T extends NeedleType>(
 const fn = (type: NeedleType, payload: unknown) => {
   const parsed = transformData(type, payload);
 
+  console.log(parsed);
   return parsed;
 };
