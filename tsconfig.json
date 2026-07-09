@@ -6,7 +6,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig_modules
-    "module": "nodenext",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "target": "esnext",
     "types": ["node"],
 

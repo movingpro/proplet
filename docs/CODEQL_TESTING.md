@@ -22,6 +22,7 @@ codeql database create test-db --language=javascript-typescript --source-root=./
 For each query, create test files with both vulnerable and safe code examples.
 
 **Directory Structure:**
+
 ```
 codeql-custom-queries-javascript/
 ├── tests/
@@ -37,6 +38,7 @@ codeql-custom-queries-javascript/
 ### 2. Example Test File
 
 **tests/hardcoded-secrets/test.js:**
+
 ```javascript
 // Should trigger: Hardcoded API key
 const apiKey1 = "sk_live_abc123xyz789def456ghi012jkl345"; // $ MISSING: hardcoded-credentials
@@ -67,6 +69,7 @@ const config = {
 ```
 
 **tests/hardcoded-secrets/test.expected:**
+
 ```
 | test.js:2:17:2:53 | Potential hardcoded secret or API key found in string literal |
 | test.js:5:16:5:36 | Potential hardcoded secret or API key found in string literal |
@@ -211,17 +214,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
-      
+
       - name: Run Query Tests
         run: |
           cd codeql-custom-queries-javascript
           codeql test run tests/
-          
+
       - name: Check for test failures
         run: |
           if [ $? -ne 0 ]; then
@@ -258,6 +261,7 @@ codeql query run-log analyze evaluator.log
 ### Optimization Tips
 
 1. **Add early filters:**
+
 ```ql
 // Bad - evaluates everything
 from CallExpr call
@@ -266,13 +270,14 @@ select call
 
 // Good - filters early
 from CallExpr call
-where 
+where
   call.getCalleeName() = "query" and
   call.getFile().getBaseName().matches("%.js")
 select call
 ```
 
 2. **Use specific predicates:**
+
 ```ql
 // Bad - too broad
 from Expr e
@@ -284,6 +289,7 @@ where s.getValue().matches("%password%")
 ```
 
 3. **Limit recursion depth:**
+
 ```ql
 // Bad - unlimited recursion
 expr.getAChild*()
@@ -318,12 +324,14 @@ Before committing a new query:
 ### 1. Over-fitting to Examples
 
 **Problem:**
+
 ```ql
 // Only detects exact pattern
 where s.getValue() = "sk_live_abc123"
 ```
 
 **Solution:**
+
 ```ql
 // Detects pattern family
 where s.getValue().regexpMatch("sk_live_[a-zA-Z0-9]{20,}")
@@ -332,6 +340,7 @@ where s.getValue().regexpMatch("sk_live_[a-zA-Z0-9]{20,}")
 ### 2. Missing Sanitizers
 
 **Problem:**
+
 ```ql
 // Doesn't account for validation
 override predicate isSink(DataFlow::Node sink) {
@@ -340,6 +349,7 @@ override predicate isSink(DataFlow::Node sink) {
 ```
 
 **Solution:**
+
 ```ql
 override predicate isSanitizer(DataFlow::Node node) {
   node = any(ValidationCall v)
@@ -349,6 +359,7 @@ override predicate isSanitizer(DataFlow::Node node) {
 ### 3. Ignoring Context
 
 **Problem:**
+
 ```ql
 // Flags all console.log
 from CallExpr call
@@ -356,10 +367,11 @@ where call.getCallee().(PropAccess).getPropertyName() = "log"
 ```
 
 **Solution:**
+
 ```ql
 // Excludes test files and dev blocks
 from CallExpr call
-where 
+where
   call.getCallee().(PropAccess).getPropertyName() = "log" and
   not call.getFile().getBaseName().matches("%test%") and
   not isInDevBlock(call)

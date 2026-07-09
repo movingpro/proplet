@@ -1,14 +1,24 @@
 {
   "languages": {
     "TypeScript": {
-      "language_servers": ["!eslint", "..."],
+      "language_servers": [
+        "!vtsls",
+        "typescript-language-server",
+        "!eslint",
+        "..."
+      ],
       "code_actions_on_format": {
         "source.fixAll.oxc": true,
         "source.organizeImports": true
       }
     },
     "JavaScript": {
-      "language_servers": ["!eslint", "..."],
+      "language_servers": [
+        "!vtsls",
+        "typescript-language-server",
+        "!eslint",
+        "..."
+      ],
       "code_actions_on_format": {
         "source.fixAll.oxc": true,
         "source.organizeImports": true

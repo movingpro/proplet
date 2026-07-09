@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { conditions } from "./conditions.js";
-import { damageLocations } from "./damageLocations.js";
-import { locations } from "./locations.js";
+import { conditions } from "./conditions";
+import { damageLocations } from "./damageLocations";
+import { locations } from "./locations";
 
 export const tenants = pgTable("Tenant", {
   id: uuid(),

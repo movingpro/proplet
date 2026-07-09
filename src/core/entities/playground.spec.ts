@@ -1,7 +1,8 @@
+import { NeedleType, transformData } from "#core/entities/playground";
 import * as assert from "node:assert/strict";
-import { describe, it, mock } from "node:test";
-import { fn, NeedleType, transformData } from "./playground.js";
+import { describe, it } from "node:test";
 
+/* oxlint-disable typescript/no-floating-promises */
 describe("playground", () => {
   describe("transformData", () => {
     describe("condition type", () => {
@@ -289,95 +290,6 @@ describe("playground", () => {
     });
   });
 
-  describe("fn", () => {
-    it("should call transformData and return parsed result", () => {
-      const validData = {
-        publicId: 100,
-        name: "Function Test",
-      };
-
-      const result = fn(NeedleType.condition, validData);
-
-      assert.deepEqual(result, validData);
-    });
-
-    it("should log the parsed data to console", () => {
-      const validData = {
-        publicId: 200,
-        secret: "test-secret",
-      };
-
-      // Mock console.log
-      const originalLog = console.log;
-      const logMock = mock.fn();
-      console.log = logMock;
-
-      try {
-        fn(NeedleType.location, validData);
-
-        // Verify console.log was called
-        assert.equal(logMock.mock.calls.length, 1);
-        const firstCall = logMock.mock.calls[0];
-        if (firstCall) {
-          assert.deepEqual(firstCall.arguments[0], validData);
-        }
-      } finally {
-        // Restore console.log
-        console.log = originalLog;
-      }
-    });
-
-    it("should throw error when transformData fails", () => {
-      const invalidData = {
-        publicId: "not-a-number",
-        name: "Test",
-      };
-
-      assert.throws(() => fn(NeedleType.condition, invalidData), {
-        name: "ZodError",
-      });
-    });
-
-    it("should work with all NeedleType values", () => {
-      const testCases = [
-        {
-          type: NeedleType.condition,
-          data: { publicId: 1, name: "Test" },
-        },
-        {
-          type: NeedleType.location,
-          data: { publicId: 2, secret: "secret1" },
-        },
-        {
-          type: NeedleType.damageLocation,
-          data: { publicId: 3, secret: "secret2" },
-        },
-      ];
-
-      // Mock console.log to avoid output
-      const originalLog = console.log;
-      console.log = mock.fn();
-
-      try {
-        testCases.forEach(({ type, data }) => {
-          const result = fn(type, data);
-          assert.deepEqual(result, data);
-        });
-      } finally {
-        console.log = originalLog;
-      }
-    });
-
-    it("should not catch errors from transformData", () => {
-      const invalidData = {
-        publicId: 1.5,
-        name: "Test",
-      };
-
-      assert.throws(() => fn(NeedleType.condition, invalidData));
-    });
-  });
-
   describe("NeedleType enum", () => {
     it("should have correct enum values", () => {
       assert.equal(NeedleType.condition, 0);
@@ -444,66 +356,6 @@ describe("playground", () => {
         assert.equal(typeof result.secret, "string");
       }
       assert.equal(typeof result.publicId, "number");
-    });
-  });
-
-  describe("integration tests", () => {
-    it("should handle complete workflow for condition", () => {
-      const input = {
-        publicId: 42,
-        name: "New Condition",
-      };
-
-      const result = fn(NeedleType.condition, input);
-
-      assert.equal(result.publicId, 42);
-      if ("name" in result) {
-        assert.equal(result.name, "New Condition");
-      }
-    });
-
-    it("should handle complete workflow for location", () => {
-      const input = {
-        publicId: 100,
-        secret: "location-secret-key",
-      };
-
-      // Mock console.log
-      const originalLog = console.log;
-      console.log = mock.fn();
-
-      try {
-        const result = fn(NeedleType.location, input);
-
-        assert.equal(result.publicId, 100);
-        if ("secret" in result) {
-          assert.equal(result.secret, "location-secret-key");
-        }
-      } finally {
-        console.log = originalLog;
-      }
-    });
-
-    it("should handle complete workflow for damageLocation", () => {
-      const input = {
-        publicId: 999,
-        secret: "damage-secret-key",
-      };
-
-      // Mock console.log
-      const originalLog = console.log;
-      console.log = mock.fn();
-
-      try {
-        const result = fn(NeedleType.damageLocation, input);
-
-        assert.equal(result.publicId, 999);
-        if ("secret" in result) {
-          assert.equal(result.secret, "damage-secret-key");
-        }
-      } finally {
-        console.log = originalLog;
-      }
     });
   });
 });

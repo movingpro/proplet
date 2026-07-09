@@ -7,9 +7,11 @@ CodeQL is a semantic code analysis engine that helps you discover vulnerabilitie
 ## What's Configured
 
 ### 1. GitHub Actions Workflow
+
 Location: `.github/workflows/codeql.yml`
 
 The workflow runs automatically on:
+
 - **Push** to the `main` branch
 - **Pull requests** targeting `main`
 - **Weekly schedule** (Fridays at 8:17 AM UTC)
@@ -17,10 +19,12 @@ The workflow runs automatically on:
 ### 2. Query Suites Enabled
 
 #### Built-in Query Suites
+
 - **security-extended**: Comprehensive security queries (high and medium precision)
 - **security-and-quality**: Security queries plus code quality checks
 
 #### Custom Queries
+
 Located in: `codeql-custom-queries-javascript/`
 
 1. **hardcoded-secrets.ql** - Detects hardcoded API keys, passwords, and tokens
@@ -30,9 +34,11 @@ Located in: `codeql-custom-queries-javascript/`
 5. **console-log-in-production.ql** - Flags debug console statements in production code
 
 ### 3. Configuration File
+
 Location: `.github/codeql/codeql-config.yml`
 
 Configured to:
+
 - Scan only the `src` directory
 - Exclude `node_modules`, `dist`, and test files
 - Run both built-in and custom query suites
@@ -40,7 +46,9 @@ Configured to:
 ## Running CodeQL Locally
 
 ### Prerequisites
+
 Install the CodeQL CLI:
+
 ```bash
 # macOS
 brew install codeql
@@ -51,6 +59,7 @@ brew install codeql
 ### Steps to Run Locally
 
 1. **Create a CodeQL database:**
+
 ```bash
 codeql database create ./codeql-db \
   --language=javascript-typescript \
@@ -58,6 +67,7 @@ codeql database create ./codeql-db \
 ```
 
 2. **Run analysis with built-in queries:**
+
 ```bash
 codeql database analyze ./codeql-db \
   javascript-security-and-quality.qls \
@@ -66,6 +76,7 @@ codeql database analyze ./codeql-db \
 ```
 
 3. **Run custom queries:**
+
 ```bash
 codeql database analyze ./codeql-db \
   ./codeql-custom-queries-javascript \
@@ -74,6 +85,7 @@ codeql database analyze ./codeql-db \
 ```
 
 4. **View results in readable format:**
+
 ```bash
 codeql database analyze ./codeql-db \
   javascript-security-and-quality.qls \
@@ -83,6 +95,7 @@ codeql database analyze ./codeql-db \
 ## Understanding Results
 
 ### Severity Levels
+
 - **Error** (Critical/High): Security vulnerabilities that need immediate attention
 - **Warning** (Medium): Potential issues that should be reviewed
 - **Note** (Low): Code quality suggestions
@@ -90,6 +103,7 @@ codeql database analyze ./codeql-db \
 ### Common Issues Detected
 
 #### 🔴 Critical Security Issues
+
 - SQL Injection vulnerabilities
 - Hardcoded credentials
 - Command injection
@@ -97,12 +111,14 @@ codeql database analyze ./codeql-db \
 - XSS (Cross-Site Scripting)
 
 #### 🟡 Medium Security Issues
+
 - Unvalidated redirects
 - Weak cryptography
 - Insecure randomness
 - Missing input validation
 
 #### 🔵 Code Quality Issues
+
 - Missing error handling
 - Dead code
 - Unused variables
@@ -177,6 +193,7 @@ query-filters:
 4. Review and triage alerts
 
 ### Alert Actions
+
 - **Dismiss**: Mark as false positive or won't fix
 - **Create issue**: Track the fix
 - **Open PR**: Fix directly
@@ -184,12 +201,15 @@ query-filters:
 ## Best Practices
 
 ### 1. Fix High-Severity Issues First
+
 Focus on security vulnerabilities (marked as Error/Critical) before code quality issues.
 
 ### 2. Don't Disable All Warnings
+
 Review warnings carefully - they often indicate real issues.
 
 ### 3. Use Suppressions Sparingly
+
 Only suppress false positives with clear comments:
 
 ```javascript
@@ -198,24 +218,31 @@ const query = `SELECT * FROM users WHERE id = ${userId}`;
 ```
 
 ### 4. Keep CodeQL Updated
+
 GitHub automatically updates the action, but for local CLI:
+
 ```bash
 brew upgrade codeql  # macOS
 ```
 
 ### 5. Review Custom Queries Regularly
+
 As your codebase evolves, update custom queries to match new patterns.
 
 ## Troubleshooting
 
 ### Issue: Workflow Fails with "Out of Memory"
+
 **Solution**: Use a larger runner in `.github/workflows/codeql.yml`:
+
 ```yaml
 runs-on: ubuntu-latest-4-cores
 ```
 
 ### Issue: Too Many False Positives
+
 **Solution**: Adjust precision in custom queries or add sanitizers:
+
 ```ql
 override predicate isSanitizer(DataFlow::Node node) {
   // Add your sanitization logic
@@ -223,10 +250,13 @@ override predicate isSanitizer(DataFlow::Node node) {
 ```
 
 ### Issue: Missing Vulnerabilities
+
 **Solution**: Lower precision threshold or add more custom queries.
 
 ### Issue: Custom Queries Not Running
+
 **Solution**: Verify `codeql-pack.yml` is valid:
+
 ```bash
 codeql pack install codeql-custom-queries-javascript/
 ```

@@ -1,5 +1,5 @@
 {
-  "name": "proplet",
+  "name": "@movingpro/proplet",
   "version": "1.0.0",
   "description": "",
   "homepage": "https://github.com/mixator/proplet#readme",
@@ -8,36 +8,34 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mixator/proplet.git"
+    "url": "git+https://github.com/movingpro/proplet.git"
   },
   "license": "ISC",
   "type": "module",
   "imports": {
-    "#*": "./src/*"
+    "#*": "./src/*.ts"
   },
   "scripts": {
     "dev": "rolldown --config rolldown.config.ts --watch",
     "build": "rolldown --config rolldown.config.ts",
     "format": "oxfmt",
     "lint": "oxlint --type-aware",
-    "test": "tsx --test \"src/**/*.spec.ts\"",
-    "test:watch": "tsx --test --watch \"src/**/*.spec.ts\""
+    "test": "node --experimental-transform-types --test --coverage \"src/**/*.spec.ts\""
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.6",
-    "drizzle-orm": "^0.45.0",
-    "hono": "^4.10.7",
-    "postgres": "^3.4.7",
-    "zod": "^4.1.13"
+    "@hono/node-server": "^2.0.8",
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.28",
+    "postgres": "^3.4.9",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@rollup/plugin-run": "^3.1.0",
-    "@types/node": "^24.10.1",
-    "oxfmt": "^0.16.0",
-    "oxlint": "^1.31.0",
-    "oxlint-tsgolint": "^0.8.3",
-    "rolldown": "^1.0.0-beta.53",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "@types/node": "^26.1.1",
+    "oxfmt": "^0.58.0",
+    "oxlint": "^1.73.0",
+    "oxlint-tsgolint": "^0.24.0",
+    "rolldown": "^1.1.5",
+    "typescript": "^7.1.0-dev.20260708.3"
   }
 }

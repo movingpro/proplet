@@ -34,17 +34,4 @@ export type InferSchemaType<T extends NeedleType> = z.infer<SchemaMap[T]>;
 export const transformData = <T extends NeedleType>(
   type: T,
   payload: unknown,
-): InferSchemaType<T> => {
-  const schema = schemaMap[type];
-  if (!schema) {
-    throw new Error(`Unknown type: ${type}`);
-  }
-  return schema.parse(payload) as InferSchemaType<T>;
-};
-
-export const fn = (type: NeedleType, payload: unknown) => {
-  const parsed = transformData(type, payload);
-
-  console.log(parsed);
-  return parsed;
-};
+): InferSchemaType<T> => schemaMap[type].parse(payload) as InferSchemaType<T>;

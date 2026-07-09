@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import type { Context } from "hono";
 
-import dbContext from "#infrastructure/dbContext.js";
-import { conditions } from "#infrastructure/schema/conditions.js";
+import dbContext from "#infrastructure/dbContext";
+import { conditions } from "#infrastructure/schema/conditions";
 
 export const saveConditionsCommand = async (c: Context) => {
   try {

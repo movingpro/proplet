@@ -1,7 +1,4 @@
-export { conditions, conditionsRelations } from "./conditions.js";
-export {
-  damageLocations,
-  damageLocationsRelations,
-} from "./damageLocations.js";
-export { locations, locationsRelations } from "./locations.js";
-export { tenants, tenantsRelations } from "./tenants.js";
+export { conditions, conditionsRelations } from "./conditions";
+export { damageLocations, damageLocationsRelations } from "./damageLocations";
+export { locations, locationsRelations } from "./locations";
+export { tenants, tenantsRelations } from "./tenants";

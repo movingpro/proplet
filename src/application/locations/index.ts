@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
-import { getLocationsQuery } from "./getLocationsQuery.js";
-import { saveLocationsCommand } from "./saveLocationsCommand.js";
+import { getLocationsQuery } from "./getLocationsQuery";
+import { saveLocationsCommand } from "./saveLocationsCommand";
 
 const locationsApi = new Hono();
 

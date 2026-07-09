@@ -1,10 +1,9 @@
+import conditionsApi from "#application/conditions/index";
+import locationsApi from "#application/locations/index";
 import { Hono } from "hono";
 import { contextStorage } from "hono/context-storage";
 import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
-
-import conditionsApi from "#application/conditions/index.js";
-import locationsApi from "#application/locations/index.js";
 
 type Env = {
   Variables: {

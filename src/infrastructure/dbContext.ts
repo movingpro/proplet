@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import * as schema from "./schema/index.js";
+import * as schema from "./schema/index";
 
 const queryClient = postgres("");
 const dbContext = drizzle({

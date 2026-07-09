@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
-import { getConditionsQuery } from "./getConditionsQuery.js";
-import { saveConditionsCommand } from "./saveConditionsCommand.js";
+import { getConditionsQuery } from "./getConditionsQuery";
+import { saveConditionsCommand } from "./saveConditionsCommand";
 
 const conditionsApi = new Hono();
 

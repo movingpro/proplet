@@ -5,6 +5,7 @@ This document shows common vulnerability patterns that CodeQL detects and how to
 ## 🔴 SQL Injection
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // String concatenation with user input
 app.get('/user/:id', async (req, res) => {
@@ -24,10 +25,12 @@ app.post('/search', async (req, res) => {
 ```
 
 **Why it's vulnerable**: Attacker can inject malicious SQL code
+
 - Input: `1 OR 1=1 --` returns all users
 - Input: `'; DROP TABLE users; --` deletes the table
 
 ### ✅ Secure Code
+
 ```javascript
 // Use parameterized queries (PostgreSQL example)
 app.get('/user/:id', async (req, res) => {
@@ -62,6 +65,7 @@ app.post('/search', async (req, res) => {
 ## 🔴 Hardcoded Secrets
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // Hardcoded API keys
 const STRIPE_SECRET_KEY = "sk_live_51JxK2jL3m4n5p6q7r8s9t0u1v2w3x4y5z";
@@ -80,12 +84,14 @@ const connectionString = "postgresql://admin:SuperSecret123@localhost:5432/mydb"
 ```
 
 **Why it's vulnerable**:
+
 - Secrets exposed in version control
 - Easy to extract from deployed code
 - Can't rotate credentials without code changes
 - Anyone with code access has production credentials
 
 ### ✅ Secure Code
+
 ```javascript
 // Use environment variables
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
@@ -109,6 +115,7 @@ const connectionString = process.env.DATABASE_URL;
 ```
 
 **Environment file** (`.env` - never commit this!):
+
 ```bash
 STRIPE_SECRET_KEY=sk_live_actual_key_here
 AWS_ACCESS_KEY=actual_access_key
@@ -123,6 +130,7 @@ FIREBASE_API_KEY=actual_api_key
 ## 🟡 Unvalidated URL Redirect
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // Direct redirect from query parameter
 app.get('/redirect', (req, res) => {
@@ -133,7 +141,7 @@ app.get('/redirect', (req, res) => {
 // Redirect from POST body
 app.post('/login', async (req, res) => {
   const { username, password, returnUrl } = req.body;
-  
+
   if (await validateCredentials(username, password)) {
     res.redirect(returnUrl); // Dangerous!
   }
@@ -147,22 +155,24 @@ app.get('/external', (req, res) => {
 ```
 
 **Why it's vulnerable**: Phishing attacks
+
 - Attacker sends: `https://yoursite.com/redirect?url=https://evil.com`
 - User clicks, sees your trusted domain
 - Gets redirected to attacker's site
 - Attacker harvests credentials on fake login page
 
 ### ✅ Secure Code
+
 ```javascript
 // Validate against allowlist
 const ALLOWED_DOMAINS = ['example.com', 'app.example.com'];
 
 app.get('/redirect', (req, res) => {
   const url = req.query.url;
-  
+
   try {
     const parsedUrl = new URL(url);
-    
+
     if (ALLOWED_DOMAINS.includes(parsedUrl.hostname)) {
       res.redirect(url);
     } else {
@@ -176,7 +186,7 @@ app.get('/redirect', (req, res) => {
 // Allow only relative paths
 app.post('/login', async (req, res) => {
   const { username, password, returnUrl } = req.body;
-  
+
   if (await validateCredentials(username, password)) {
     // Only allow relative URLs (starts with /)
     if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
@@ -190,7 +200,7 @@ app.post('/login', async (req, res) => {
 // Validate and sanitize referer
 app.get('/external', (req, res) => {
   const referer = req.headers.referer;
-  
+
   if (referer) {
     const parsedUrl = new URL(referer);
     if (ALLOWED_DOMAINS.includes(parsedUrl.hostname)) {
@@ -198,7 +208,7 @@ app.get('/external', (req, res) => {
       return;
     }
   }
-  
+
   res.redirect('/');
 });
 ```
@@ -210,6 +220,7 @@ app.get('/external', (req, res) => {
 ## 🟡 Missing Error Handling
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // No try-catch in async function
 async function fetchUserData(userId) {
@@ -235,6 +246,7 @@ app.get('/user/:id', async (req, res) => {
 ```
 
 **Why it's problematic**:
+
 - Crashes the application
 - Exposes internal errors to users
 - No logging of errors
@@ -242,6 +254,7 @@ app.get('/user/:id', async (req, res) => {
 - Can leak sensitive information in error messages
 
 ### ✅ Secure Code
+
 ```javascript
 // Proper try-catch in async function
 async function fetchUserData(userId) {
@@ -293,16 +306,17 @@ app.use((error, req, res, next) => {
 ## 🔵 Console.log in Production
 
 ### ❌ Vulnerable Code
+
 ```javascript
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  
+
   console.log('Login attempt:', username, password); // Logs sensitive data!
   console.log('User object:', req.user);
-  
+
   const result = await authenticateUser(username, password);
   console.log('Auth result:', result);
-  
+
   res.json({ success: true });
 });
 
@@ -310,12 +324,13 @@ app.post('/login', async (req, res) => {
 function processPayment(paymentData) {
   console.log('Payment data:', paymentData);
   console.log('API Key:', process.env.STRIPE_SECRET_KEY); // Leaks secrets!
-  
+
   return stripe.charges.create(paymentData);
 }
 ```
 
 **Why it's problematic**:
+
 - Logs sensitive data (passwords, tokens, PII)
 - Performance impact
 - Clutters production logs
@@ -324,15 +339,16 @@ function processPayment(paymentData) {
 - No log levels or filtering
 
 ### ✅ Secure Code
+
 ```javascript
 // Use proper logging library
 import { logger } from './logger'; // Winston, Pino, etc.
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  
+
   logger.info('Login attempt', { username }); // Don't log password!
-  
+
   try {
     const result = await authenticateUser(username, password);
     logger.info('Successful login', { username, userId: result.userId });
@@ -352,9 +368,9 @@ function processPayment(paymentData) {
     // Don't log full card number
     cardLast4: paymentData.card.last4
   };
-  
+
   logger.info('Processing payment', sanitizedData);
-  
+
   return stripe.charges.create(paymentData);
 }
 
@@ -372,6 +388,7 @@ if (process.env.DEBUG === 'true') {
 ```
 
 **Logger Configuration Example**:
+
 ```javascript
 import winston from 'winston';
 
@@ -399,6 +416,7 @@ if (process.env.NODE_ENV !== 'production') {
 ## 🔴 Command Injection
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // Executing shell commands with user input
 const exec = require('child_process').exec;
@@ -420,24 +438,26 @@ app.get('/read', (req, res) => {
 ```
 
 **Why it's vulnerable**: Remote code execution
+
 - Input: `example.com; rm -rf /` executes malicious command
 - Input: `example.com && cat /etc/passwd` leaks system files
 - Attacker gains full server control
 
 ### ✅ Secure Code
+
 ```javascript
 // Use safe APIs instead of shell commands
 const { ping } = require('net-ping');
 
 app.get('/ping', async (req, res) => {
   const host = req.query.host;
-  
+
   // Validate hostname format
   const hostnameRegex = /^[a-zA-Z0-9.-]+$/;
   if (!hostnameRegex.test(host)) {
     return res.status(400).json({ error: 'Invalid hostname' });
   }
-  
+
   // Use safe ping library
   const session = ping.createSession();
   session.pingHost(host, (error, target, sent, rcvd) => {
@@ -455,17 +475,17 @@ const path = require('path');
 
 app.get('/read', async (req, res) => {
   const filename = req.query.file;
-  
+
   // Validate filename (no path traversal)
   if (filename.includes('..') || filename.includes('/')) {
     return res.status(400).json({ error: 'Invalid filename' });
   }
-  
+
   const allowedFiles = ['data.txt', 'report.pdf', 'config.json'];
   if (!allowedFiles.includes(filename)) {
     return res.status(403).json({ error: 'File not allowed' });
   }
-  
+
   try {
     const filePath = path.join('/var/data', filename);
     const content = await fs.readFile(filePath, 'utf-8');
@@ -480,12 +500,12 @@ const { execFile } = require('child_process');
 
 app.get('/convert', async (req, res) => {
   const inputFile = req.query.input;
-  
+
   // Validate filename
   if (!/^[a-zA-Z0-9_-]+\.txt$/.test(inputFile)) {
     return res.status(400).json({ error: 'Invalid filename' });
   }
-  
+
   // Use execFile with array (no shell interpretation)
   execFile('/usr/bin/convert', [inputFile, 'output.pdf'], (error, stdout) => {
     if (error) {
@@ -503,6 +523,7 @@ app.get('/convert', async (req, res) => {
 ## 🔴 Path Traversal
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // Direct file access with user input
 app.get('/download', (req, res) => {
@@ -519,59 +540,61 @@ app.get('/image', (req, res) => {
 ```
 
 **Why it's vulnerable**: Access unauthorized files
+
 - Input: `../../../../etc/passwd` reads system files
 - Input: `../../config/database.yml` exposes config
 - Attacker can read any file the process can access
 
 ### ✅ Secure Code
+
 ```javascript
 const path = require('path');
 const fs = require('fs').promises;
 
 app.get('/download', async (req, res) => {
   const filename = req.query.file;
-  
+
   // Validate filename (basic check)
   if (!filename || filename.includes('..') || filename.includes('/')) {
     return res.status(400).json({ error: 'Invalid filename' });
   }
-  
+
   // Whitelist allowed files
   const allowedFiles = await fs.readdir('/var/www/uploads');
   if (!allowedFiles.includes(filename)) {
     return res.status(404).json({ error: 'File not found' });
   }
-  
+
   // Resolve and validate the path
   const uploadDir = path.resolve('/var/www/uploads');
   const filePath = path.resolve(uploadDir, filename);
-  
+
   // Ensure resolved path is within upload directory
   if (!filePath.startsWith(uploadDir)) {
     return res.status(403).json({ error: 'Access denied' });
   }
-  
+
   res.sendFile(filePath);
 });
 
 // Secure image serving
 app.get('/image', async (req, res) => {
   const imageName = req.query.name;
-  
+
   // Only allow alphanumeric and specific characters
   const safePattern = /^[a-zA-Z0-9_-]+\.(jpg|jpeg|png|gif)$/;
   if (!safePattern.test(imageName)) {
     return res.status(400).json({ error: 'Invalid image name' });
   }
-  
+
   const publicDir = path.resolve(__dirname, 'public', 'images');
   const imagePath = path.resolve(publicDir, imageName);
-  
+
   // Verify path is within public directory
   if (!imagePath.startsWith(publicDir)) {
     return res.status(403).json({ error: 'Access denied' });
   }
-  
+
   // Check file exists
   try {
     await fs.access(imagePath);
@@ -589,6 +612,7 @@ app.get('/image', async (req, res) => {
 ## 🔴 Cross-Site Scripting (XSS)
 
 ### ❌ Vulnerable Code
+
 ```javascript
 // Direct HTML rendering with user input
 app.get('/search', (req, res) => {
@@ -609,11 +633,13 @@ app.get('/profile', (req, res) => {
 ```
 
 **Why it's vulnerable**: Execute malicious scripts
+
 - Input: `<script>alert('XSS')</script>` runs JavaScript
 - Input: `<img src=x onerror=alert('XSS')>` runs on error
 - Attacker can steal cookies, tokens, or modify page
 
 ### ✅ Secure Code
+
 ```javascript
 // Use templating engine with auto-escaping (e.g., EJS, Pug)
 import ejs from 'ejs';

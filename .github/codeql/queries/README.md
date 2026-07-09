@@ -21,6 +21,7 @@ Detects all console method calls in the codebase.
 - **Description**: Identifies any console method calls (log, warn, error, info, debug, etc.) that should be removed before production deployment
 
 This query catches:
+
 - `console.log()`
 - `console.warn()`
 - `console.error()`
@@ -69,6 +70,7 @@ codeql bqrs decode results.sarif --format=text
 ### GitHub Actions
 
 The queries run automatically on:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Weekly schedule (Fridays at 8:17 AM)
@@ -105,6 +107,7 @@ console.log("This is allowed");
 ### Changing Severity
 
 Edit the `@problem.severity` annotation in the query file:
+
 - `error` - Blocks CI/CD
 - `warning` - Shows warning (default)
 - `recommendation` - Advisory only

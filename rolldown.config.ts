@@ -1,6 +1,5 @@
-import { defineConfig } from "rolldown";
-
 import run from "@rollup/plugin-run";
+import { defineConfig } from "rolldown";
 
 // @ts-ignore
 const dev = process.env.ROLLUP_WATCH === "true";
