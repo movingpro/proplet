@@ -250,7 +250,7 @@ gh api repos/:owner/:repo/code-scanning/alerts \
 const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
 
 // ✅ GOOD
-const query = 'SELECT * FROM users WHERE id = $1';
+const query = "SELECT * FROM users WHERE id = $1";
 db.query(query, [req.params.id]);
 ```
 
@@ -279,7 +279,7 @@ async function fetchData() {
     const data = await api.getData();
     return data;
   } catch (error) {
-    logger.error('Failed to fetch data', error);
+    logger.error("Failed to fetch data", error);
     throw error;
   }
 }
@@ -289,18 +289,18 @@ async function fetchData() {
 
 ```javascript
 // ❌ BAD
-app.get('/redirect', (req, res) => {
+app.get("/redirect", (req, res) => {
   res.redirect(req.query.url);
 });
 
 // ✅ GOOD
-app.get('/redirect', (req, res) => {
-  const allowedDomains = ['example.com'];
+app.get("/redirect", (req, res) => {
+  const allowedDomains = ["example.com"];
   const url = new URL(req.query.url);
   if (allowedDomains.includes(url.hostname)) {
     res.redirect(req.query.url);
   } else {
-    res.status(400).send('Invalid redirect');
+    res.status(400).send("Invalid redirect");
   }
 });
 ```

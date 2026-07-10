@@ -12,12 +12,9 @@ export const damageLocations = pgTable("DamageLocation", {
   tenantId: uuid().references(() => tenants.id),
 });
 
-export const damageLocationsRelations = relations(
-  damageLocations,
-  ({ one }) => ({
-    tenant: one(tenants, {
-      fields: [damageLocations.tenantId],
-      references: [tenants.id],
-    }),
+export const damageLocationsRelations = relations(damageLocations, ({ one }) => ({
+  tenant: one(tenants, {
+    fields: [damageLocations.tenantId],
+    references: [tenants.id],
   }),
-);
+}));

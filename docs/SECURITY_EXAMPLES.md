@@ -8,7 +8,7 @@ This document shows common vulnerability patterns that CodeQL detects and how to
 
 ```javascript
 // String concatenation with user input
-app.get('/user/:id', async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   const userId = req.params.id;
   const query = `SELECT * FROM users WHERE id = ${userId}`;
   const result = await db.query(query);
@@ -16,7 +16,7 @@ app.get('/user/:id', async (req, res) => {
 });
 
 // Template literal with user input
-app.post('/search', async (req, res) => {
+app.post("/search", async (req, res) => {
   const searchTerm = req.body.search;
   const query = `SELECT * FROM products WHERE name LIKE '%${searchTerm}%'`;
   const results = await db.query(query);
@@ -33,26 +33,26 @@ app.post('/search', async (req, res) => {
 
 ```javascript
 // Use parameterized queries (PostgreSQL example)
-app.get('/user/:id', async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   const userId = req.params.id;
-  const query = 'SELECT * FROM users WHERE id = $1';
+  const query = "SELECT * FROM users WHERE id = $1";
   const result = await db.query(query, [userId]);
   res.json(result);
 });
 
 // Use ORM with parameterized queries (Drizzle ORM)
-import { eq } from 'drizzle-orm';
+import { eq } from "drizzle-orm";
 
-app.get('/user/:id', async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   const userId = parseInt(req.params.id);
   const result = await db.select().from(users).where(eq(users.id, userId));
   res.json(result);
 });
 
 // Search with proper escaping
-app.post('/search', async (req, res) => {
+app.post("/search", async (req, res) => {
   const searchTerm = req.body.search;
-  const query = 'SELECT * FROM products WHERE name ILIKE $1';
+  const query = "SELECT * FROM products WHERE name ILIKE $1";
   const results = await db.query(query, [`%${searchTerm}%`]);
   res.json(results);
 });
@@ -76,7 +76,7 @@ const DATABASE_PASSWORD = "MySecretP@ssw0rd123";
 const config = {
   apiKey: "AIzaSyDx1234567890abcdefghijklmnopqrst",
   authDomain: "myapp.firebaseapp.com",
-  databaseURL: "https://myapp.firebaseio.com"
+  databaseURL: "https://myapp.firebaseio.com",
 };
 
 // In connection string
@@ -100,14 +100,14 @@ const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
 
 // Validate environment variables at startup
 if (!STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY environment variable is required');
+  throw new Error("STRIPE_SECRET_KEY environment variable is required");
 }
 
 // In configuration with validation
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
 };
 
 // Connection string from environment
@@ -133,13 +133,13 @@ FIREBASE_API_KEY=actual_api_key
 
 ```javascript
 // Direct redirect from query parameter
-app.get('/redirect', (req, res) => {
+app.get("/redirect", (req, res) => {
   const url = req.query.url;
   res.redirect(url);
 });
 
 // Redirect from POST body
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password, returnUrl } = req.body;
 
   if (await validateCredentials(username, password)) {
@@ -148,7 +148,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Header-based redirect
-app.get('/external', (req, res) => {
+app.get("/external", (req, res) => {
   const referer = req.headers.referer;
   res.redirect(referer);
 });
@@ -165,9 +165,9 @@ app.get('/external', (req, res) => {
 
 ```javascript
 // Validate against allowlist
-const ALLOWED_DOMAINS = ['example.com', 'app.example.com'];
+const ALLOWED_DOMAINS = ["example.com", "app.example.com"];
 
-app.get('/redirect', (req, res) => {
+app.get("/redirect", (req, res) => {
   const url = req.query.url;
 
   try {
@@ -176,29 +176,29 @@ app.get('/redirect', (req, res) => {
     if (ALLOWED_DOMAINS.includes(parsedUrl.hostname)) {
       res.redirect(url);
     } else {
-      res.status(400).send('Invalid redirect URL');
+      res.status(400).send("Invalid redirect URL");
     }
   } catch (error) {
-    res.status(400).send('Invalid URL');
+    res.status(400).send("Invalid URL");
   }
 });
 
 // Allow only relative paths
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password, returnUrl } = req.body;
 
   if (await validateCredentials(username, password)) {
     // Only allow relative URLs (starts with /)
-    if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
+    if (returnUrl && returnUrl.startsWith("/") && !returnUrl.startsWith("//")) {
       res.redirect(returnUrl);
     } else {
-      res.redirect('/dashboard');
+      res.redirect("/dashboard");
     }
   }
 });
 
 // Validate and sanitize referer
-app.get('/external', (req, res) => {
+app.get("/external", (req, res) => {
   const referer = req.headers.referer;
 
   if (referer) {
@@ -209,7 +209,7 @@ app.get('/external', (req, res) => {
     }
   }
 
-  res.redirect('/');
+  res.redirect("/");
 });
 ```
 
@@ -224,21 +224,21 @@ app.get('/external', (req, res) => {
 ```javascript
 // No try-catch in async function
 async function fetchUserData(userId) {
-  const user = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
-  const orders = await db.query('SELECT * FROM orders WHERE user_id = $1', [userId]);
+  const user = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
+  const orders = await db.query("SELECT * FROM orders WHERE user_id = $1", [userId]);
   return { user, orders };
 }
 
 // Unhandled promise rejection
-app.get('/data', (req, res) => {
-  fetchData().then(data => {
+app.get("/data", (req, res) => {
+  fetchData().then((data) => {
     res.json(data);
   });
   // Missing .catch()
 });
 
 // Await without try-catch
-app.get('/user/:id', async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   const user = await getUserById(req.params.id);
   const profile = await getProfileById(user.profileId);
   res.json({ user, profile });
@@ -259,43 +259,43 @@ app.get('/user/:id', async (req, res) => {
 // Proper try-catch in async function
 async function fetchUserData(userId) {
   try {
-    const user = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
-    const orders = await db.query('SELECT * FROM orders WHERE user_id = $1', [userId]);
+    const user = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
+    const orders = await db.query("SELECT * FROM orders WHERE user_id = $1", [userId]);
     return { user, orders };
   } catch (error) {
-    logger.error('Error fetching user data:', { userId, error });
-    throw new Error('Failed to fetch user data');
+    logger.error("Error fetching user data:", { userId, error });
+    throw new Error("Failed to fetch user data");
   }
 }
 
 // Promise with catch handler
-app.get('/data', (req, res) => {
+app.get("/data", (req, res) => {
   fetchData()
-    .then(data => {
+    .then((data) => {
       res.json(data);
     })
-    .catch(error => {
-      logger.error('Error fetching data:', error);
-      res.status(500).json({ error: 'Internal server error' });
+    .catch((error) => {
+      logger.error("Error fetching data:", error);
+      res.status(500).json({ error: "Internal server error" });
     });
 });
 
 // Await with try-catch
-app.get('/user/:id', async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   try {
     const user = await getUserById(req.params.id);
     const profile = await getProfileById(user.profileId);
     res.json({ user, profile });
   } catch (error) {
-    logger.error('Error fetching user:', { userId: req.params.id, error });
-    res.status(500).json({ error: 'Failed to fetch user data' });
+    logger.error("Error fetching user:", { userId: req.params.id, error });
+    res.status(500).json({ error: "Failed to fetch user data" });
   }
 });
 
 // Global error handler (Express)
 app.use((error, req, res, next) => {
-  logger.error('Unhandled error:', error);
-  res.status(500).json({ error: 'Internal server error' });
+  logger.error("Unhandled error:", error);
+  res.status(500).json({ error: "Internal server error" });
 });
 ```
 
@@ -308,22 +308,22 @@ app.use((error, req, res, next) => {
 ### ❌ Vulnerable Code
 
 ```javascript
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  console.log('Login attempt:', username, password); // Logs sensitive data!
-  console.log('User object:', req.user);
+  console.log("Login attempt:", username, password); // Logs sensitive data!
+  console.log("User object:", req.user);
 
   const result = await authenticateUser(username, password);
-  console.log('Auth result:', result);
+  console.log("Auth result:", result);
 
   res.json({ success: true });
 });
 
 // Debugging statements left in code
 function processPayment(paymentData) {
-  console.log('Payment data:', paymentData);
-  console.log('API Key:', process.env.STRIPE_SECRET_KEY); // Leaks secrets!
+  console.log("Payment data:", paymentData);
+  console.log("API Key:", process.env.STRIPE_SECRET_KEY); // Leaks secrets!
 
   return stripe.charges.create(paymentData);
 }
@@ -342,20 +342,20 @@ function processPayment(paymentData) {
 
 ```javascript
 // Use proper logging library
-import { logger } from './logger'; // Winston, Pino, etc.
+import { logger } from "./logger"; // Winston, Pino, etc.
 
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  logger.info('Login attempt', { username }); // Don't log password!
+  logger.info("Login attempt", { username }); // Don't log password!
 
   try {
     const result = await authenticateUser(username, password);
-    logger.info('Successful login', { username, userId: result.userId });
+    logger.info("Successful login", { username, userId: result.userId });
     res.json({ success: true });
   } catch (error) {
-    logger.error('Login failed', { username, error: error.message });
-    res.status(401).json({ error: 'Invalid credentials' });
+    logger.error("Login failed", { username, error: error.message });
+    res.status(401).json({ error: "Invalid credentials" });
   }
 });
 
@@ -366,46 +366,48 @@ function processPayment(paymentData) {
     amount: paymentData.amount,
     currency: paymentData.currency,
     // Don't log full card number
-    cardLast4: paymentData.card.last4
+    cardLast4: paymentData.card.last4,
   };
 
-  logger.info('Processing payment', sanitizedData);
+  logger.info("Processing payment", sanitizedData);
 
   return stripe.charges.create(paymentData);
 }
 
 // Development-only logging
 function debugLog(message, data) {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     console.log(message, data);
   }
 }
 
 // Conditional debug logging
-if (process.env.DEBUG === 'true') {
-  logger.debug('Debug info', { data });
+if (process.env.DEBUG === "true") {
+  logger.debug("Debug info", { data });
 }
 ```
 
 **Logger Configuration Example**:
 
 ```javascript
-import winston from 'winston';
+import winston from "winston";
 
 export const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || "info",
   format: winston.format.json(),
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
+    new winston.transports.File({ filename: "error.log", level: "error" }),
+    new winston.transports.File({ filename: "combined.log" }),
+  ],
 });
 
 // Don't log to console in production
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
+if (process.env.NODE_ENV !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    }),
+  );
 }
 ```
 
@@ -419,9 +421,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 ```javascript
 // Executing shell commands with user input
-const exec = require('child_process').exec;
+const exec = require("child_process").exec;
 
-app.get('/ping', (req, res) => {
+app.get("/ping", (req, res) => {
   const host = req.query.host;
   exec(`ping -c 4 ${host}`, (error, stdout, stderr) => {
     res.send(stdout);
@@ -429,7 +431,7 @@ app.get('/ping', (req, res) => {
 });
 
 // File operations with user input
-app.get('/read', (req, res) => {
+app.get("/read", (req, res) => {
   const filename = req.query.file;
   exec(`cat /var/data/${filename}`, (error, stdout) => {
     res.send(stdout);
@@ -447,22 +449,22 @@ app.get('/read', (req, res) => {
 
 ```javascript
 // Use safe APIs instead of shell commands
-const { ping } = require('net-ping');
+const { ping } = require("net-ping");
 
-app.get('/ping', async (req, res) => {
+app.get("/ping", async (req, res) => {
   const host = req.query.host;
 
   // Validate hostname format
   const hostnameRegex = /^[a-zA-Z0-9.-]+$/;
   if (!hostnameRegex.test(host)) {
-    return res.status(400).json({ error: 'Invalid hostname' });
+    return res.status(400).json({ error: "Invalid hostname" });
   }
 
   // Use safe ping library
   const session = ping.createSession();
   session.pingHost(host, (error, target, sent, rcvd) => {
     if (error) {
-      res.status(500).json({ error: 'Ping failed' });
+      res.status(500).json({ error: "Ping failed" });
     } else {
       res.json({ host: target, latency: rcvd - sent });
     }
@@ -470,46 +472,46 @@ app.get('/ping', async (req, res) => {
 });
 
 // Use fs module instead of shell commands
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require("fs").promises;
+const path = require("path");
 
-app.get('/read', async (req, res) => {
+app.get("/read", async (req, res) => {
   const filename = req.query.file;
 
   // Validate filename (no path traversal)
-  if (filename.includes('..') || filename.includes('/')) {
-    return res.status(400).json({ error: 'Invalid filename' });
+  if (filename.includes("..") || filename.includes("/")) {
+    return res.status(400).json({ error: "Invalid filename" });
   }
 
-  const allowedFiles = ['data.txt', 'report.pdf', 'config.json'];
+  const allowedFiles = ["data.txt", "report.pdf", "config.json"];
   if (!allowedFiles.includes(filename)) {
-    return res.status(403).json({ error: 'File not allowed' });
+    return res.status(403).json({ error: "File not allowed" });
   }
 
   try {
-    const filePath = path.join('/var/data', filename);
-    const content = await fs.readFile(filePath, 'utf-8');
+    const filePath = path.join("/var/data", filename);
+    const content = await fs.readFile(filePath, "utf-8");
     res.send(content);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to read file' });
+    res.status(500).json({ error: "Failed to read file" });
   }
 });
 
 // If you MUST use exec, use execFile with array args
-const { execFile } = require('child_process');
+const { execFile } = require("child_process");
 
-app.get('/convert', async (req, res) => {
+app.get("/convert", async (req, res) => {
   const inputFile = req.query.input;
 
   // Validate filename
   if (!/^[a-zA-Z0-9_-]+\.txt$/.test(inputFile)) {
-    return res.status(400).json({ error: 'Invalid filename' });
+    return res.status(400).json({ error: "Invalid filename" });
   }
 
   // Use execFile with array (no shell interpretation)
-  execFile('/usr/bin/convert', [inputFile, 'output.pdf'], (error, stdout) => {
+  execFile("/usr/bin/convert", [inputFile, "output.pdf"], (error, stdout) => {
     if (error) {
-      return res.status(500).json({ error: 'Conversion failed' });
+      return res.status(500).json({ error: "Conversion failed" });
     }
     res.json({ success: true });
   });
@@ -526,15 +528,15 @@ app.get('/convert', async (req, res) => {
 
 ```javascript
 // Direct file access with user input
-app.get('/download', (req, res) => {
+app.get("/download", (req, res) => {
   const filename = req.query.file;
   res.sendFile(`/var/www/uploads/${filename}`);
 });
 
 // Path concatenation
-app.get('/image', (req, res) => {
+app.get("/image", (req, res) => {
   const imagePath = req.query.path;
-  const fullPath = path.join(__dirname, 'public', imagePath);
+  const fullPath = path.join(__dirname, "public", imagePath);
   res.sendFile(fullPath);
 });
 ```
@@ -548,51 +550,51 @@ app.get('/image', (req, res) => {
 ### ✅ Secure Code
 
 ```javascript
-const path = require('path');
-const fs = require('fs').promises;
+const path = require("path");
+const fs = require("fs").promises;
 
-app.get('/download', async (req, res) => {
+app.get("/download", async (req, res) => {
   const filename = req.query.file;
 
   // Validate filename (basic check)
-  if (!filename || filename.includes('..') || filename.includes('/')) {
-    return res.status(400).json({ error: 'Invalid filename' });
+  if (!filename || filename.includes("..") || filename.includes("/")) {
+    return res.status(400).json({ error: "Invalid filename" });
   }
 
   // Whitelist allowed files
-  const allowedFiles = await fs.readdir('/var/www/uploads');
+  const allowedFiles = await fs.readdir("/var/www/uploads");
   if (!allowedFiles.includes(filename)) {
-    return res.status(404).json({ error: 'File not found' });
+    return res.status(404).json({ error: "File not found" });
   }
 
   // Resolve and validate the path
-  const uploadDir = path.resolve('/var/www/uploads');
+  const uploadDir = path.resolve("/var/www/uploads");
   const filePath = path.resolve(uploadDir, filename);
 
   // Ensure resolved path is within upload directory
   if (!filePath.startsWith(uploadDir)) {
-    return res.status(403).json({ error: 'Access denied' });
+    return res.status(403).json({ error: "Access denied" });
   }
 
   res.sendFile(filePath);
 });
 
 // Secure image serving
-app.get('/image', async (req, res) => {
+app.get("/image", async (req, res) => {
   const imageName = req.query.name;
 
   // Only allow alphanumeric and specific characters
   const safePattern = /^[a-zA-Z0-9_-]+\.(jpg|jpeg|png|gif)$/;
   if (!safePattern.test(imageName)) {
-    return res.status(400).json({ error: 'Invalid image name' });
+    return res.status(400).json({ error: "Invalid image name" });
   }
 
-  const publicDir = path.resolve(__dirname, 'public', 'images');
+  const publicDir = path.resolve(__dirname, "public", "images");
   const imagePath = path.resolve(publicDir, imageName);
 
   // Verify path is within public directory
   if (!imagePath.startsWith(publicDir)) {
-    return res.status(403).json({ error: 'Access denied' });
+    return res.status(403).json({ error: "Access denied" });
   }
 
   // Check file exists
@@ -600,7 +602,7 @@ app.get('/image', async (req, res) => {
     await fs.access(imagePath);
     res.sendFile(imagePath);
   } catch (error) {
-    res.status(404).json({ error: 'Image not found' });
+    res.status(404).json({ error: "Image not found" });
   }
 });
 ```
@@ -615,13 +617,13 @@ app.get('/image', async (req, res) => {
 
 ```javascript
 // Direct HTML rendering with user input
-app.get('/search', (req, res) => {
+app.get("/search", (req, res) => {
   const query = req.query.q;
   res.send(`<h1>Search Results for: ${query}</h1>`);
 });
 
 // Unescaped template rendering
-app.get('/profile', (req, res) => {
+app.get("/profile", (req, res) => {
   const username = req.query.name;
   const html = `
     <div class="profile">
@@ -642,11 +644,11 @@ app.get('/profile', (req, res) => {
 
 ```javascript
 // Use templating engine with auto-escaping (e.g., EJS, Pug)
-import ejs from 'ejs';
+import ejs from "ejs";
 
-app.get('/search', (req, res) => {
+app.get("/search", (req, res) => {
   const query = req.query.q;
-  const template = '<h1>Search Results for: <%= query %></h1>';
+  const template = "<h1>Search Results for: <%= query %></h1>";
   const html = ejs.render(template, { query }); // Auto-escapes
   res.send(html);
 });
@@ -654,16 +656,16 @@ app.get('/search', (req, res) => {
 // Manual escaping if needed
 function escapeHtml(text) {
   const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
   };
-  return text.replace(/[&<>"']/g, m => map[m]);
+  return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
-app.get('/profile', (req, res) => {
+app.get("/profile", (req, res) => {
   const username = escapeHtml(req.query.name);
   const html = `
     <div class="profile">
@@ -674,7 +676,7 @@ app.get('/profile', (req, res) => {
 });
 
 // Best: Return JSON and render on client with framework
-app.get('/search', (req, res) => {
+app.get("/search", (req, res) => {
   const query = req.query.q;
   // React/Vue/etc will handle escaping
   res.json({ query, results: [] });
@@ -682,9 +684,9 @@ app.get('/search', (req, res) => {
 
 // Set security headers
 app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Content-Security-Policy", "default-src 'self'");
   next();
 });
 ```

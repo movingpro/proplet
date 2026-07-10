@@ -6,11 +6,11 @@
   "bugs": {
     "url": "https://github.com/mixator/proplet/issues"
   },
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/movingpro/proplet.git"
   },
-  "license": "ISC",
   "type": "module",
   "imports": {
     "#*": "./src/*.ts"

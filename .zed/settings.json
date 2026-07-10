@@ -1,37 +1,146 @@
 {
   "languages": {
-    "TypeScript": {
-      "language_servers": [
-        "!vtsls",
-        "typescript-language-server",
-        "!eslint",
-        "..."
-      ],
-      "code_actions_on_format": {
-        "source.fixAll.oxc": true,
-        "source.organizeImports": true
-      }
+    "CSS": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "HTML": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
     },
     "JavaScript": {
-      "language_servers": [
-        "!vtsls",
-        "typescript-language-server",
-        "!eslint",
-        "..."
-      ],
-      "code_actions_on_format": {
-        "source.fixAll.oxc": true,
-        "source.organizeImports": true
-      }
+      "language_servers": ["tsgo", "!vtsls", "!typescript-language-server", "!eslint", "..."],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        },
+        {
+          "code_action": "source.fixAll.oxc"
+        }
+      ]
+    },
+    "JSON": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "JSONC": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "Markdown": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "TypeScript": {
+      "language_servers": ["tsgo", "!vtsls", "!typescript-language-server", "!eslint", "..."],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "TSX": {
+      "language_servers": ["tsgo", "!vtsls", "!typescript-language-server", "!eslint", "..."],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "YAML": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
     }
   },
   "lsp": {
-    "oxc": {
+    "oxlint": {
       "initialization_options": {
-        "options": {
+        "settings": {
+          "configPath": null,
           "run": "onType",
-          "typeAware": true,
-          "fmt.experimental": true
+          "disableNestedConfig": false,
+          "fixKind": "safe_fix",
+          "unusedDisableDirectives": "deny"
+        }
+      }
+    },
+    "oxfmt": {
+      "initialization_options": {
+        "settings": {
+          "fmt.configPath": null,
+          "run": "onSave"
         }
       }
     }

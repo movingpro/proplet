@@ -37,7 +37,6 @@
     "skipLibCheck": true,
 
     "importHelpers": false,
-    "esModuleInterop": false,
 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true

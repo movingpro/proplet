@@ -1,6 +1,7 @@
-import { NeedleType, transformData } from "#core/entities/playground";
 import * as assert from "node:assert/strict";
 import { describe, it } from "node:test";
+
+import { NeedleType, transformData } from "#core/entities/playground";
 
 /* oxlint-disable typescript/no-floating-promises */
 describe("playground", () => {
@@ -182,12 +183,9 @@ describe("playground", () => {
           secret: "secret",
         };
 
-        assert.throws(
-          () => transformData(NeedleType.damageLocation, invalidData),
-          {
-            name: "ZodError",
-          },
-        );
+        assert.throws(() => transformData(NeedleType.damageLocation, invalidData), {
+          name: "ZodError",
+        });
       });
 
       it("should throw error when secret is empty", () => {
@@ -196,12 +194,9 @@ describe("playground", () => {
           secret: "",
         };
 
-        assert.throws(
-          () => transformData(NeedleType.damageLocation, invalidData),
-          {
-            name: "ZodError",
-          },
-        );
+        assert.throws(() => transformData(NeedleType.damageLocation, invalidData), {
+          name: "ZodError",
+        });
       });
 
       it("should throw error when secret exceeds 255 characters", () => {
@@ -210,12 +205,9 @@ describe("playground", () => {
           secret: "s".repeat(256),
         };
 
-        assert.throws(
-          () => transformData(NeedleType.damageLocation, invalidData),
-          {
-            name: "ZodError",
-          },
-        );
+        assert.throws(() => transformData(NeedleType.damageLocation, invalidData), {
+          name: "ZodError",
+        });
       });
     });
 
@@ -298,9 +290,7 @@ describe("playground", () => {
     });
 
     it("should have three enum members", () => {
-      const enumValues = Object.keys(NeedleType).filter((key) =>
-        isNaN(Number(key)),
-      );
+      const enumValues = Object.keys(NeedleType).filter((key) => isNaN(Number(key)));
       assert.equal(enumValues.length, 3);
     });
   });

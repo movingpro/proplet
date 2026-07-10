@@ -167,10 +167,10 @@ Edit `.github/codeql/codeql-config.yml`:
 ```yaml
 paths:
   - src
-  - lib  # Add more paths
+  - lib # Add more paths
 
 paths-ignore:
-  - "**/*.test.ts"  # Add more exclusions
+  - "**/*.test.ts" # Add more exclusions
 ```
 
 ### Disabling Specific Queries

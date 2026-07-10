@@ -64,7 +64,7 @@ const status = "active";
 // Should trigger: Database password
 const config = {
   user: "admin",
-  password: "MyDatabaseP@ssw0rd123" // $ MISSING: hardcoded-credentials
+  password: "MyDatabaseP@ssw0rd123", // $ MISSING: hardcoded-credentials
 };
 ```
 
@@ -114,7 +114,7 @@ async function getData() {
 
 // Console.log - Production code
 function processPayment(data) {
-  console.log('Payment data:', data); // SHOULD DETECT
+  console.log("Payment data:", data); // SHOULD DETECT
   return stripe.charge(data);
 }
 ```
@@ -125,7 +125,7 @@ Test cases that should NOT trigger alerts:
 
 ```javascript
 // SQL Injection - Parameterized query
-const query1 = 'SELECT * FROM users WHERE id = $1'; // SHOULD NOT DETECT
+const query1 = "SELECT * FROM users WHERE id = $1"; // SHOULD NOT DETECT
 db.query(query1, [userId]);
 
 // SQL Injection - ORM usage
@@ -148,13 +148,13 @@ async function getData() {
 }
 
 // Console.log - Test file (test.js)
-test('should work', () => {
-  console.log('test output'); // SHOULD NOT DETECT (test file)
+test("should work", () => {
+  console.log("test output"); // SHOULD NOT DETECT (test file)
 });
 
 // Console.log - Dev block
-if (process.env.NODE_ENV !== 'production') {
-  console.log('debug info'); // SHOULD NOT DETECT
+if (process.env.NODE_ENV !== "production") {
+  console.log("debug info"); // SHOULD NOT DETECT
 }
 ```
 
@@ -166,17 +166,17 @@ Test boundary conditions:
 // Hardcoded Secrets - Edge cases
 const short = "abc123"; // SHOULD NOT DETECT (too short)
 const long = "a".repeat(50); // SHOULD NOT DETECT (no secret pattern)
-const encoded = Buffer.from('secret').toString('base64'); // CONSIDER
-const encrypted = encryptSecret('actual_secret'); // SHOULD NOT DETECT
+const encoded = Buffer.from("secret").toString("base64"); // CONSIDER
+const encrypted = encryptSecret("actual_secret"); // SHOULD NOT DETECT
 
 // SQL Injection - Edge cases
-const staticQuery = 'SELECT * FROM users'; // SHOULD NOT DETECT (no user input)
+const staticQuery = "SELECT * FROM users"; // SHOULD NOT DETECT (no user input)
 const number = parseInt(userId); // SHOULD NOT DETECT (sanitized)
 const query = sql`SELECT * FROM users WHERE id = ${userId}`; // SHOULD NOT DETECT (tagged template)
 
 // Path Traversal - Edge cases
 const safePath = path.join(BASE_DIR, sanitize(filename)); // SHOULD NOT DETECT
-const relativePath = './data.txt'; // SHOULD NOT DETECT (relative, no user input)
+const relativePath = "./data.txt"; // SHOULD NOT DETECT (relative, no user input)
 ```
 
 ## Test Annotations
@@ -204,10 +204,10 @@ name: Test CodeQL Queries
 on:
   push:
     paths:
-      - 'codeql-custom-queries-javascript/**'
+      - "codeql-custom-queries-javascript/**"
   pull_request:
     paths:
-      - 'codeql-custom-queries-javascript/**'
+      - "codeql-custom-queries-javascript/**"
 
 jobs:
   test:
