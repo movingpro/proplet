@@ -1,12 +1,9 @@
-import type { Context } from "hono";
-
 import dbContext from "#infrastructure/dbContext";
-import { currentTenantId } from "#infrastructure/sessionContext";
 
-export const getConditionsQuery = async (c: Context) => {
-  const result = await dbContext.query.conditions.findMany({
-    where: ({ tenantId }, { eq }) => eq(tenantId, currentTenantId()),
+export const getConditionsQuery = async (tenantId: string) => {
+  return await dbContext.query.conditions.findMany({
+    where: {
+      tenantId,
+    },
   });
-
-  return c.json(result);
 };

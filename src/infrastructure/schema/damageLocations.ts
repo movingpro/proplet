@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { tenants } from "./tenants";
@@ -11,10 +10,3 @@ export const damageLocations = pgTable("DamageLocation", {
   }).notNull(),
   tenantId: uuid().references(() => tenants.id),
 });
-
-export const damageLocationsRelations = relations(damageLocations, ({ one }) => ({
-  tenant: one(tenants, {
-    fields: [damageLocations.tenantId],
-    references: [tenants.id],
-  }),
-}));
