@@ -1,10 +1,11 @@
 import { serve } from "@hono/node-server";
 
 import dbContext from "./infrastructure/dbContext.js";
+import { env } from "./infrastructure/env.js";
 import app from "./main.js";
 
-const server = serve(app, (info) => {
-  console.log(`Listening on http://localhost:${info.port}`); // Listening on http://localhost:3000
+const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
+  console.log(`Listening on http://localhost:${info.port}`);
 });
 
 process.on("SIGINT", async () => {

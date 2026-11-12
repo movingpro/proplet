@@ -125,6 +125,12 @@
     }
   },
   "lsp": {
+    "tsgo": {
+      "binary": {
+        "path": "node_modules/tsrs/tsdk/tsgo",
+        "arguments": ["--lsp", "--stdio"]
+      }
+    },
     "oxlint": {
       "initialization_options": {
         "settings": {

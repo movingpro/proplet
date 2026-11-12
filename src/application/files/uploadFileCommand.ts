@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 
 import dbContext from "#infrastructure/dbContext";
-import { fileStorage } from "#infrastructure/fileStorage/diskStorage";
+import { fileStorage } from "#infrastructure/fileStorage/index";
 import { files } from "#infrastructure/schema/files";
 
 interface UploadFileInput {

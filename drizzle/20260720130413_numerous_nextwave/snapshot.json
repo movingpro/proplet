@@ -1,42 +1,231 @@
 {
-  "version": "8",
+  "type": "base",
+  "version": "9",
   "dialect": "postgres",
   "id": "4f331aed-7822-4bf3-9808-c5c0ee255694",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Condition"
+      ],
+      "writes": [
+        "s|tbl|public.Condition",
+        "n|tbl|public.Condition",
+        "e|tbl|public.Condition",
+        "n|rel|public.Condition",
+        "n|type|public.Condition"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "DamageLocation"
+      ],
+      "writes": [
+        "s|tbl|public.DamageLocation",
+        "n|tbl|public.DamageLocation",
+        "e|tbl|public.DamageLocation",
+        "n|rel|public.DamageLocation",
+        "n|type|public.DamageLocation"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "files"
+      ],
+      "writes": [
+        "s|tbl|public.files",
+        "n|tbl|public.files",
+        "e|tbl|public.files",
+        "n|rel|public.files",
+        "n|type|public.files",
+        "n|rel|public.files_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Location"
+      ],
+      "writes": [
+        "s|tbl|public.Location",
+        "n|tbl|public.Location",
+        "e|tbl|public.Location",
+        "n|rel|public.Location",
+        "n|type|public.Location"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Tenant"
+      ],
+      "writes": [
+        "s|tbl|public.Tenant",
+        "n|tbl|public.Tenant",
+        "e|tbl|public.Tenant",
+        "n|rel|public.Tenant",
+        "n|type|public.Tenant"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Condition"
+      ],
+      "writes": [
+        "s|fk|public.Condition.Condition_tenantId_Tenant_id_fkey",
+        "n|fk|public.Condition.Condition_tenantId_Tenant_id_fkey",
+        "e|fk|public.Condition.Condition_tenantId_Tenant_id_fkey",
+        "n|con|public.Condition.Condition_tenantId_Tenant_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Condition",
+        "n|sch|public",
+        "n|tbl|public.Tenant",
+        "n|sch|public",
+        "n|col|public.Condition.tenantId",
+        "n|col|public.Tenant.id",
+        "e|uniqueness|public.Tenant.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "DamageLocation"
+      ],
+      "writes": [
+        "s|fk|public.DamageLocation.DamageLocation_tenantId_Tenant_id_fkey",
+        "n|fk|public.DamageLocation.DamageLocation_tenantId_Tenant_id_fkey",
+        "e|fk|public.DamageLocation.DamageLocation_tenantId_Tenant_id_fkey",
+        "n|con|public.DamageLocation.DamageLocation_tenantId_Tenant_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.DamageLocation",
+        "n|sch|public",
+        "n|tbl|public.Tenant",
+        "n|sch|public",
+        "n|col|public.DamageLocation.tenantId",
+        "n|col|public.Tenant.id",
+        "e|uniqueness|public.Tenant.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "files"
+      ],
+      "writes": [
+        "s|fk|public.files.files_tenantId_Tenant_id_fkey",
+        "n|fk|public.files.files_tenantId_Tenant_id_fkey",
+        "e|fk|public.files.files_tenantId_Tenant_id_fkey",
+        "n|con|public.files.files_tenantId_Tenant_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.files",
+        "n|sch|public",
+        "n|tbl|public.Tenant",
+        "n|sch|public",
+        "n|col|public.files.tenantId",
+        "n|col|public.Tenant.id",
+        "e|uniqueness|public.Tenant.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Location"
+      ],
+      "writes": [
+        "s|fk|public.Location.Location_tenantId_Tenant_id_fkey",
+        "n|fk|public.Location.Location_tenantId_Tenant_id_fkey",
+        "e|fk|public.Location.Location_tenantId_Tenant_id_fkey",
+        "n|con|public.Location.Location_tenantId_Tenant_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Location",
+        "n|sch|public",
+        "n|tbl|public.Tenant",
+        "n|sch|public",
+        "n|col|public.Location.tenantId",
+        "n|col|public.Tenant.id",
+        "e|uniqueness|public.Tenant.id"
+      ]
+    }
+  ],
   "ddl": [
     {
-      "isRlsEnabled": false,
+      "schema": "public",
       "name": "Condition",
-      "entityType": "tables",
-      "schema": "public"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "public",
       "name": "DamageLocation",
-      "entityType": "tables",
-      "schema": "public"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "public",
       "name": "files",
-      "entityType": "tables",
-      "schema": "public"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "public",
       "name": "Location",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
       "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
       "name": "Tenant",
-      "entityType": "tables",
-      "schema": "public"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
+      "schema": "public",
+      "table": "Condition",
+      "name": "id",
       "type": "uuid",
       "typeSchema": null,
       "notNull": false,
@@ -44,12 +233,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Condition"
+      "entityType": "columns"
     },
     {
+      "schema": "public",
+      "table": "Condition",
+      "name": "publicId",
       "type": "integer",
       "typeSchema": null,
       "notNull": false,
@@ -57,12 +246,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "publicId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Condition"
+      "entityType": "columns"
     },
     {
+      "schema": "public",
+      "table": "Condition",
+      "name": "name",
       "type": "varchar(255)",
       "typeSchema": null,
       "notNull": true,
@@ -70,25 +259,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Condition"
+      "entityType": "columns"
     },
     {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "public",
+      "table": "Condition",
       "name": "tenantId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Condition"
-    },
-    {
       "type": "uuid",
       "typeSchema": null,
       "notNull": false,
@@ -96,12 +272,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "DamageLocation"
+      "entityType": "columns"
     },
     {
+      "schema": "public",
+      "table": "DamageLocation",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "DamageLocation",
+      "name": "publicId",
       "type": "integer",
       "typeSchema": null,
       "notNull": false,
@@ -109,12 +298,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "publicId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "DamageLocation"
+      "entityType": "columns"
     },
     {
+      "schema": "public",
+      "table": "DamageLocation",
+      "name": "name",
       "type": "varchar(255)",
       "typeSchema": null,
       "notNull": true,
@@ -122,12 +311,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "DamageLocation"
+      "entityType": "columns"
     },
     {
+      "schema": "public",
+      "table": "DamageLocation",
+      "name": "tenantId",
       "type": "uuid",
       "typeSchema": null,
       "notNull": false,
@@ -135,12 +324,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "tenantId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "DamageLocation"
+      "entityType": "columns"
     },
     {
+      "schema": "public",
+      "table": "files",
+      "name": "id",
       "type": "uuid",
       "typeSchema": null,
       "notNull": true,
@@ -148,258 +337,254 @@
       "default": "gen_random_uuid()",
       "generated": null,
       "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "mimeType",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "size",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "path",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "createdAt",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updatedAt",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "tenantId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Location"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "publicId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Location"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Location"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "tenantId",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Location"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Tenant"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "Tenant"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "tenantId"
-      ],
-      "schemaTo": "public",
-      "tableTo": "Tenant",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "NO ACTION",
-      "name": "Condition_tenantId_Tenant_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "Condition"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "tenantId"
-      ],
-      "schemaTo": "public",
-      "tableTo": "Tenant",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "NO ACTION",
-      "name": "DamageLocation_tenantId_Tenant_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "DamageLocation"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "tenantId"
-      ],
-      "schemaTo": "public",
-      "tableTo": "Tenant",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "NO ACTION",
-      "name": "files_tenantId_Tenant_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "files"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "tenantId"
-      ],
-      "schemaTo": "public",
-      "tableTo": "Tenant",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "NO ACTION",
-      "name": "Location_tenantId_Tenant_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "Location"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "files_pkey",
       "schema": "public",
       "table": "files",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "mimeType",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "size",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "path",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "createdAt",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "updatedAt",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "tenantId",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Location",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Location",
+      "name": "publicId",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Location",
+      "name": "name",
+      "type": "varchar(255)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Location",
+      "name": "tenantId",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Tenant",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Tenant",
+      "name": "name",
+      "type": "varchar(255)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Condition",
+      "name": "Condition_tenantId_Tenant_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "tenantId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Tenant",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "DamageLocation",
+      "name": "DamageLocation_tenantId_Tenant_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "tenantId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Tenant",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "files_tenantId_Tenant_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "tenantId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Tenant",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Location",
+      "name": "Location_tenantId_Tenant_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "tenantId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Tenant",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "files",
+      "name": "files_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
       "entityType": "pks"
     }
-  ],
-  "renames": []
+  ]
 }
