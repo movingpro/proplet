@@ -22,6 +22,10 @@ await test("DiskStorage saves, reads and deletes a file, and rejects paths outsi
       storage.readFile(`../${basePath.split("/").pop()}-other/a.txt`),
       /directory traversal/,
     );
+
+    await new DiskStorage("/").readFile(`${basePath}/missing`).catch((error: Error) => {
+      assert.doesNotMatch(error.message, /directory traversal/);
+    });
   } finally {
     await rm(basePath, { recursive: true });
   }

@@ -79,7 +79,8 @@ filesApi.get("/:fileId", async (c) => {
     };
 
     if (download) {
-      headers["Content-Disposition"] = `attachment; filename="${result.name}"`;
+      headers["Content-Disposition"] =
+        `attachment; filename*=UTF-8''${encodeURIComponent(result.name)}`;
     }
 
     return c.newResponse(new Uint8Array(result.content), { headers });

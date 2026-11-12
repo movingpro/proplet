@@ -17,12 +17,14 @@ export class S3Storage implements IFileStorage {
   }
 
   async saveFile(path: string, buffer: Buffer): Promise<void> {
-    await this.client.send(new PutObjectCommand({ Bucket: this.bucket, Key: path, Body: buffer }));
+    await this.client.send(
+      new PutObjectCommand({ Bucket: this.bucket, Key: this.getKey(path), Body: buffer }),
+    );
   }
 
   async readFile(path: string): Promise<Buffer> {
     const response = await this.client.send(
-      new GetObjectCommand({ Bucket: this.bucket, Key: path }),
+      new GetObjectCommand({ Bucket: this.bucket, Key: this.getKey(path) }),
     );
 
     if (!response.Body) {
@@ -33,6 +35,13 @@ export class S3Storage implements IFileStorage {
   }
 
   async deleteFile(path: string): Promise<void> {
-    await this.client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: path }));
+    await this.client.send(
+      new DeleteObjectCommand({ Bucket: this.bucket, Key: this.getKey(path) }),
+    );
+  }
+
+  // S3 keys have no leading slash.
+  private getKey(path: string): string {
+    return path.startsWith("/") ? path.substring(1) : path;
   }
 }
