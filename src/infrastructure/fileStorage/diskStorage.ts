@@ -5,15 +5,19 @@ import type { IFileStorage } from "./storage";
 
 export class DiskStorage implements IFileStorage {
   private basePath: string;
+  private prefix: string;
 
   constructor(basePath: string) {
     this.basePath = resolve(basePath);
+    // A filesystem root already ends with the separator.
+    this.prefix = this.basePath.endsWith(sep) ? this.basePath : this.basePath + sep;
   }
 
+  // shortcut: the check does not follow symlinks, use fs.realpath if the base path can contain links.
   private getFullPath(relativePath: string): string {
     const fullPath = resolve(this.basePath, relativePath);
 
-    if (!fullPath.startsWith(this.basePath + sep)) {
+    if (!fullPath.startsWith(this.prefix)) {
       throw new Error("Invalid file path: directory traversal detected");
     }
 

@@ -4,6 +4,8 @@ import dbContext from "#infrastructure/dbContext";
 import { fileStorage } from "#infrastructure/fileStorage/index";
 import { files } from "#infrastructure/schema/files";
 
+import { safeFileName } from "./safeFileName";
+
 interface UploadFileInput {
   tenantId: string;
   fileName: string;
@@ -13,7 +15,8 @@ interface UploadFileInput {
 
 export const uploadFileCommand = async (input: UploadFileInput) => {
   const fileId = randomUUID();
-  const storagePath = `${input.tenantId}/${fileId}/${input.fileName}`;
+  const fileName = safeFileName(input.fileName);
+  const storagePath = `${input.tenantId}/${fileId}/${fileName}`;
 
   try {
     // Save file to storage
@@ -24,7 +27,7 @@ export const uploadFileCommand = async (input: UploadFileInput) => {
       .insert(files)
       .values({
         id: fileId,
-        name: input.fileName,
+        name: fileName,
         mimeType: input.mimeType,
         size: input.buffer.length,
         path: storagePath,

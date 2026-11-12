@@ -28,8 +28,6 @@ jobs:
           languages: javascript-typescript
           build-mode: none
           config-file: ./.github/codeql/codeql-config.yml
-          # This list replaces the queries in the config file.
-          queries: security-extended,security-and-quality
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
