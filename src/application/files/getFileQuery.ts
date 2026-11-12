@@ -1,5 +1,5 @@
 import dbContext from "#infrastructure/dbContext";
-import { fileStorage } from "#infrastructure/fileStorage/diskStorage";
+import { fileStorage } from "#infrastructure/fileStorage/index";
 
 /**
  * Retrieve file metadata and optionally the file content

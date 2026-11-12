@@ -3,5 +3,4 @@
 - include:
     kind: problem
     id:
-      - js/console-log
       - js/console-statement
