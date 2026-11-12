@@ -28,7 +28,7 @@
     "drizzle-orm": "^1.0.0-rc.4-5d5b77c",
     "hono": "^4.12.34",
     "postgres": "^3.4.9",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@rollup/plugin-run": "^3.1.0",
