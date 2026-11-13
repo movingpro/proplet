@@ -1,7 +1,6 @@
-import { eq } from "drizzle-orm/pg-core/expressions";
+import { currentDb } from "#infrastructure/sessionContext";
 
-import dbContext from "#infrastructure/dbContext";
-import { files } from "#infrastructure/schema/files";
+import type { FileRecord } from "./fileRecord";
 
 interface ListFilesOptions {
   tenantId: string;
@@ -16,24 +15,29 @@ interface ListFilesOptions {
 export const listFilesQuery = async (options: ListFilesOptions) => {
   const { tenantId, search, limit = 50, offset = 0 } = options;
 
-  const data = await dbContext.query.files.findMany({
-    where: {
-      tenantId,
-      ...(search ? { name: `%${search}%` } : {}),
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
+  const db = currentDb();
+  // An empty search matches all names.
+  const where = `WHERE "tenantId" = ? AND "name" LIKE ?`;
+  const pattern = `%${search ?? ""}%`;
+
+  const data = await db.query<FileRecord>(
+    `SELECT * FROM "files" ${where} ORDER BY "createdAt" DESC LIMIT ? OFFSET ?`,
+    tenantId,
+    pattern,
     limit,
     offset,
-  });
+  );
 
   // Get total count for pagination
-  const countData = await dbContext.$count(files, eq(files.tenantId, tenantId));
+  const [count] = await db.query<{ total: number }>(
+    `SELECT count(*) AS "total" FROM "files" ${where}`,
+    tenantId,
+    pattern,
+  );
 
   return {
     files: data,
-    total: countData,
+    total: count?.total ?? 0,
     limit,
     offset,
   };

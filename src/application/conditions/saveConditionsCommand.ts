@@ -1,14 +1,30 @@
-import { eq } from "drizzle-orm";
+import * as z from "zod";
 
-import dbContext from "#infrastructure/dbContext";
-import { conditions } from "#infrastructure/schema/conditions";
+import { currentDb } from "#infrastructure/sessionContext";
 
-export const saveConditionsCommand = async (
-  tenantId: string,
-  conditionsData: (typeof conditions.$inferInsert)[],
-) => {
-  return await dbContext.transaction(async (tx) => {
-    await tx.delete(conditions).where(eq(conditions.tenantId, tenantId));
-    await tx.insert(conditions).values(conditionsData);
-  });
+const schema = z.array(
+  z.object({
+    id: z.uuid().nullish(),
+    publicId: z.int().nullish(),
+    name: z.string().max(255),
+  }),
+);
+
+export const saveConditionsCommand = async (tenantId: string, data: unknown) => {
+  // The rows get the tenant of the session, not a tenant from the request.
+  await currentDb().batch([
+    [`DELETE FROM "Condition" WHERE "tenantId" = ?`, tenantId],
+    ...schema
+      .parse(data)
+      .map(
+        (row) =>
+          [
+            `INSERT INTO "Condition" ("id", "publicId", "name", "tenantId") VALUES (?, ?, ?, ?)`,
+            row.id ?? null,
+            row.publicId ?? null,
+            row.name,
+            tenantId,
+          ] satisfies [string, ...unknown[]],
+      ),
+  ]);
 };

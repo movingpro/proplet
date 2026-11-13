@@ -1,20 +1,18 @@
-import { eq, and } from "drizzle-orm";
-
-import dbContext from "#infrastructure/dbContext";
 import { fileStorage } from "#infrastructure/fileStorage/index";
-import { files } from "#infrastructure/schema/files";
+import { currentDb } from "#infrastructure/sessionContext";
+
+import type { FileRecord } from "./fileRecord";
 
 /**
  * Delete a file and its associated storage
  */
 export const deleteFileCommand = async (fileId: string, tenantId: string) => {
   // Get file metadata
-  const fileRecord = await dbContext.query.files.findFirst({
-    where: {
-      tenantId,
-      id: fileId,
-    },
-  });
+  const [fileRecord] = await currentDb().query<FileRecord>(
+    `SELECT * FROM "files" WHERE "tenantId" = ? AND "id" = ?`,
+    tenantId,
+    fileId,
+  );
 
   if (!fileRecord) {
     throw new Error("File not found");
@@ -29,7 +27,11 @@ export const deleteFileCommand = async (fileId: string, tenantId: string) => {
   }
 
   // Delete from database
-  await dbContext.delete(files).where(and(eq(files.id, fileId), eq(files.tenantId, tenantId)));
+  await currentDb().query(
+    `DELETE FROM "files" WHERE "id" = ? AND "tenantId" = ?`,
+    fileId,
+    tenantId,
+  );
 
   return { success: true };
 };

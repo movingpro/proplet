@@ -3,7 +3,7 @@ import * as z from "zod";
 // The AWS SDK reads AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY itself.
 const result = z
   .object({
-    DATABASE_URL: z.url(),
+    DATABASE_PATH: z.string().default("./proplet.sqlite"),
     // An empty PORT uses the default.
     PORT: z.preprocess(
       (value) => value || undefined,
