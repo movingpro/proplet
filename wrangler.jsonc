@@ -18,6 +18,15 @@
     },
   ],
   "preview_urls": false,
+  // Create the database with `pnpm dlx wrangler d1 create proplet`, then set "database_id".
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "proplet",
+      "database_id": "",
+      "migrations_dir": "migrations",
+    },
+  ],
   "vars": {
     "STORAGE_TYPE": "disk",
   },

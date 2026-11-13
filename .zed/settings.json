@@ -93,6 +93,9 @@
           "language_server": {
             "name": "oxfmt"
           }
+        },
+        {
+          "code_action": "source.fixAll.oxc"
         }
       ]
     },
@@ -107,6 +110,9 @@
           "language_server": {
             "name": "oxfmt"
           }
+        },
+        {
+          "code_action": "source.fixAll.oxc"
         }
       ]
     },
@@ -136,6 +142,7 @@
         "settings": {
           "configPath": null,
           "run": "onType",
+          "typeAware": true,
           "disableNestedConfig": false,
           "fixKind": "safe_fix",
           "unusedDisableDirectives": "deny"

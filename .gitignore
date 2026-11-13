@@ -2,6 +2,7 @@ node_modules/
 dist
 coverage
 uploads
+*.sqlite
 *.log
 *.tsbuildinfo
 .DS_Store

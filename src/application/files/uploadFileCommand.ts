@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
 
-import dbContext from "#infrastructure/dbContext";
 import { fileStorage } from "#infrastructure/fileStorage/index";
-import { files } from "#infrastructure/schema/files";
+import { currentDb } from "#infrastructure/sessionContext";
 
+import type { FileRecord } from "./fileRecord";
 import { safeFileName } from "./safeFileName";
 
 interface UploadFileInput {
@@ -23,17 +23,15 @@ export const uploadFileCommand = async (input: UploadFileInput) => {
     await fileStorage.saveFile(storagePath, input.buffer);
 
     // Record in database
-    const result = await dbContext
-      .insert(files)
-      .values({
-        id: fileId,
-        name: fileName,
-        mimeType: input.mimeType,
-        size: input.buffer.length,
-        path: storagePath,
-        tenantId: input.tenantId,
-      })
-      .returning();
+    const result = await currentDb().query<FileRecord>(
+      `INSERT INTO "files" ("id", "name", "mimeType", "size", "path", "tenantId") VALUES (?, ?, ?, ?, ?, ?) RETURNING *`,
+      fileId,
+      fileName,
+      input.mimeType,
+      input.buffer.length,
+      storagePath,
+      input.tenantId,
+    );
 
     return result[0];
   } catch (error) {

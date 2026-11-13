@@ -2,6 +2,20 @@
 
 Write all replies, code comments and docs in ASD STE100 style: short direct sentences, one action per step, one word per concept.
 
+## Checks
+
+Run these commands after each code change:
+
+1. `pnpm format`
+2. `pnpm lint --fix`
+3. `pnpm test`
+
+## Git
+
+- Commit messages use Conventional Commits: `<type>(<scope>): <description>`. The scope is optional. Example: `fix(files): reject empty file name`.
+- Branch names use Conventional Branch: `<type>/<description>` in lowercase with hyphens. Example: `fix/empty-file-name`.
+- Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `perf`. Branches use `feature` and `bugfix` as alternatives to `feat` and `fix`.
+
 ## The smallest complete change
 
 Take the first option that fully works:

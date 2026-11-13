@@ -1,5 +1,7 @@
-import dbContext from "#infrastructure/dbContext";
 import { fileStorage } from "#infrastructure/fileStorage/index";
+import { currentDb } from "#infrastructure/sessionContext";
+
+import type { FileRecord } from "./fileRecord";
 
 /**
  * Retrieve file metadata and optionally the file content
@@ -10,12 +12,11 @@ export const getFileQuery = async (
   includeContent: boolean = false,
 ) => {
   // Get metadata from database
-  const fileRecord = await dbContext.query.files.findFirst({
-    where: {
-      tenantId,
-      id: fileId,
-    },
-  });
+  const [fileRecord] = await currentDb().query<FileRecord>(
+    `SELECT * FROM "files" WHERE "tenantId" = ? AND "id" = ?`,
+    tenantId,
+    fileId,
+  );
 
   if (!fileRecord) {
     throw new Error("File not found");
